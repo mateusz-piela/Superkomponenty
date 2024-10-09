@@ -17,6 +17,7 @@ public class CustomCircleView extends View {
     private Paint p;
     private float cx, cy, radius;
     private int color;
+    private int iterator;
 
     public CustomCircleView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -27,11 +28,11 @@ public class CustomCircleView extends View {
         p = new Paint();
         p.setAntiAlias(true);
         p.setStyle(Paint.Style.FILL);
-        color = Color.BLUE;
+        color = Color.YELLOW;
         p.setColor(color);
         radius = 100;
         cx = 500;
-        cy = 900;
+        cy = 1900;
     }
 
     @Override
@@ -63,20 +64,30 @@ public class CustomCircleView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            setColor(Color.GREEN);
+            setColor(Color.argb(255, (int) (Math.random()*256), (int) (Math.random()*256), (int) (Math.random()*256)));
             animation();
         }
         return super.onTouchEvent(event);
     }
 
     public void animation() {
-        ObjectAnimator radiusAnimator = ObjectAnimator.ofFloat(this, "radius", radius, radius+100);
-        radiusAnimator.setDuration(1000);
-        radiusAnimator.start();
 
-        ObjectAnimator positionAnimator = ObjectAnimator.ofFloat(this, "cy", cy, cy+500);
-        positionAnimator.setDuration(1000);
-        positionAnimator.start();
+        if(iterator%2==0){
+            ObjectAnimator positionAnimator = ObjectAnimator.ofFloat(this, "cy", cy, cy-500);
+            positionAnimator.setDuration(1000);
+            positionAnimator.start();
+            ObjectAnimator radiusAnimator = ObjectAnimator.ofFloat(this, "radius", radius, radius+200);
+            radiusAnimator.setDuration(1000);
+            radiusAnimator.start();
+        }else{
+            ObjectAnimator positionAnimator = ObjectAnimator.ofFloat(this, "cy", cy, cy+500);
+            positionAnimator.setDuration(1000);
+            positionAnimator.start();
+            ObjectAnimator radiusAnimator = ObjectAnimator.ofFloat(this, "radius", radius, radius-200);
+            radiusAnimator.setDuration(1000);
+            radiusAnimator.start();
+        }
+        iterator++;
     }
 
     public void setCy(float cy) {
